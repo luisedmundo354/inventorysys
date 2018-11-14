@@ -1,0 +1,989 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.13
+-- Dumped by pg_dump version 9.5.13
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.ar_internal_metadata OWNER TO luis;
+
+--
+-- Name: categories; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.categories (
+    id bigint NOT NULL,
+    name character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.categories OWNER TO luis;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.categories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.categories_id_seq OWNER TO luis;
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
+
+
+--
+-- Name: customers; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.customers (
+    id bigint NOT NULL,
+    fname character varying,
+    lname character varying,
+    email character varying,
+    phone integer,
+    dni integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.customers OWNER TO luis;
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.customers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.customers_id_seq OWNER TO luis;
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.customers_id_seq OWNED BY public.customers.id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.products (
+    id bigint NOT NULL,
+    name character varying,
+    brand character varying,
+    unit character varying,
+    stock double precision,
+    ss double precision,
+    deliver_time integer,
+    order_size integer,
+    level character varying,
+    commentary text,
+    category_id bigint,
+    supplier_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    upc bigint,
+    price double precision
+);
+
+
+ALTER TABLE public.products OWNER TO luis;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.products_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.products_id_seq OWNER TO luis;
+
+--
+-- Name: products_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.products_id_seq OWNED BY public.products.id;
+
+
+--
+-- Name: purchase_items; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.purchase_items (
+    id bigint NOT NULL,
+    price double precision,
+    quantity integer,
+    product_id bigint,
+    purchase_order_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.purchase_items OWNER TO luis;
+
+--
+-- Name: purchase_items_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.purchase_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.purchase_items_id_seq OWNER TO luis;
+
+--
+-- Name: purchase_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.purchase_items_id_seq OWNED BY public.purchase_items.id;
+
+
+--
+-- Name: purchase_orders; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.purchase_orders (
+    id bigint NOT NULL,
+    number integer,
+    comment text,
+    replenisher_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.purchase_orders OWNER TO luis;
+
+--
+-- Name: purchase_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.purchase_orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.purchase_orders_id_seq OWNER TO luis;
+
+--
+-- Name: purchase_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.purchase_orders_id_seq OWNED BY public.purchase_orders.id;
+
+
+--
+-- Name: replenishers; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.replenishers (
+    id bigint NOT NULL,
+    fname character varying,
+    lname character varying,
+    email character varying,
+    phone integer,
+    dni integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.replenishers OWNER TO luis;
+
+--
+-- Name: replenishers_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.replenishers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.replenishers_id_seq OWNER TO luis;
+
+--
+-- Name: replenishers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.replenishers_id_seq OWNED BY public.replenishers.id;
+
+
+--
+-- Name: sale_items; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.sale_items (
+    id bigint NOT NULL,
+    price double precision,
+    quantity integer,
+    product_id bigint,
+    sale_order_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.sale_items OWNER TO luis;
+
+--
+-- Name: sale_items_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.sale_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sale_items_id_seq OWNER TO luis;
+
+--
+-- Name: sale_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.sale_items_id_seq OWNED BY public.sale_items.id;
+
+
+--
+-- Name: sale_orders; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.sale_orders (
+    id bigint NOT NULL,
+    number integer,
+    comment text,
+    customer_id bigint,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.sale_orders OWNER TO luis;
+
+--
+-- Name: sale_orders_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.sale_orders_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.sale_orders_id_seq OWNER TO luis;
+
+--
+-- Name: sale_orders_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.sale_orders_id_seq OWNED BY public.sale_orders.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.schema_migrations (
+    version character varying NOT NULL
+);
+
+
+ALTER TABLE public.schema_migrations OWNER TO luis;
+
+--
+-- Name: suppliers; Type: TABLE; Schema: public; Owner: luis
+--
+
+CREATE TABLE public.suppliers (
+    id bigint NOT NULL,
+    name character varying,
+    manager character varying,
+    phone integer,
+    address character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.suppliers OWNER TO luis;
+
+--
+-- Name: suppliers_id_seq; Type: SEQUENCE; Schema: public; Owner: luis
+--
+
+CREATE SEQUENCE public.suppliers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.suppliers_id_seq OWNER TO luis;
+
+--
+-- Name: suppliers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: luis
+--
+
+ALTER SEQUENCE public.suppliers_id_seq OWNED BY public.suppliers.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.categories_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.customers ALTER COLUMN id SET DEFAULT nextval('public.customers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.products_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.purchase_items ALTER COLUMN id SET DEFAULT nextval('public.purchase_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.purchase_orders ALTER COLUMN id SET DEFAULT nextval('public.purchase_orders_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.replenishers ALTER COLUMN id SET DEFAULT nextval('public.replenishers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.sale_items ALTER COLUMN id SET DEFAULT nextval('public.sale_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.sale_orders ALTER COLUMN id SET DEFAULT nextval('public.sale_orders_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.suppliers ALTER COLUMN id SET DEFAULT nextval('public.suppliers_id_seq'::regclass);
+
+
+--
+-- Data for Name: ar_internal_metadata; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.ar_internal_metadata (key, value, created_at, updated_at) FROM stdin;
+environment	development	2018-10-31 13:18:12.010975	2018-10-31 13:18:12.010975
+\.
+
+
+--
+-- Data for Name: categories; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.categories (id, name, created_at, updated_at) FROM stdin;
+1	bebidas	2018-10-31 13:19:24.987431	2018-10-31 13:19:24.987431
+2	Comestibles	2018-10-31 14:01:32.870527	2018-10-31 14:01:32.870527
+3	Cereales	2018-10-31 16:10:59.44981	2018-10-31 16:10:59.44981
+4	Abarrotes	2018-10-31 16:26:02.497803	2018-10-31 16:26:02.497803
+5	Chocolates 	2018-10-31 16:43:01.377836	2018-10-31 16:43:01.377836
+6	Snack	2018-10-31 17:03:57.42374	2018-10-31 17:03:57.42374
+7	Yogurt's	2018-10-31 17:13:56.493778	2018-10-31 17:13:56.493778
+8	Galletas	2018-10-31 18:21:36.669359	2018-10-31 18:21:36.669359
+9	Gomitas	2018-10-31 18:48:13.274897	2018-10-31 18:48:13.274897
+10	Caramelos	2018-10-31 18:55:12.839206	2018-10-31 18:55:12.839206
+11	Chicles	2018-10-31 19:03:00.928309	2018-10-31 19:03:00.928309
+12	Leche	2018-10-31 19:30:01.254589	2018-10-31 19:30:01.254589
+\.
+
+
+--
+-- Name: categories_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.categories_id_seq', 12, true);
+
+
+--
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.customers (id, fname, lname, email, phone, dni, created_at, updated_at) FROM stdin;
+1	Luis	Breña	luisedmundo354@gmail.com	999240014	\N	2018-10-31 13:20:05.321548	2018-10-31 13:20:05.321548
+2	Melannie	Quezada		\N	\N	2018-11-01 00:08:14.314451	2018-11-01 00:08:14.314451
+\.
+
+
+--
+-- Name: customers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.customers_id_seq', 2, true);
+
+
+--
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.products (id, name, brand, unit, stock, ss, deliver_time, order_size, level, commentary, category_id, supplier_id, created_at, updated_at, upc, price) FROM stdin;
+1	Pan de Molde blanco	Bimbo	molde	2	2	2	2	Reponer		1	1	2018-10-31 13:28:30.371883	2018-10-31 13:28:30.371883	23	23
+2	Queso parmesano	Gloria	Bolsa 35g	3	1	7	3	Medio		1	1	2018-10-31 13:53:58.348107	2018-10-31 13:53:58.348107	7751271001205	4
+4	Pinguinos 	bimbo	80g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:05:59.869942	2018-10-31 14:05:59.869942	7750727738801	2
+5	Principe Marinela	bimbo	85g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:22:15.050364	2018-10-31 14:22:15.050364	7441029506181	2
+9	Gansito Marinela	Bimbo	50g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:33:47.509665	2018-10-31 14:33:47.509665	7750727738825	1.60000000000000009
+40	Pinguinos Marinela	Bimbo	40g bolsa	10	2	7	10	Alto		2	2	2018-10-31 16:10:45.73737	2018-10-31 16:10:45.73737	7750727005941	1
+8	Principe Marinela Chocolate 	bimbo	85g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:32:34.385224	2018-10-31 14:35:29.918601	7441029504613	2
+7	Kekitos Vainilla	bimbo	105g bolsa	4	2	7	4	Bajo		2	2	2018-10-31 14:26:35.710509	2018-10-31 14:36:28.82415	7750727004647	1.5
+41	Cereal Angel Miel	Makro	20g bolsa	12	2	7	12	Alto		3	3	2018-10-31 16:14:26.262622	2018-10-31 16:14:26.262622	7759826005326	0.5
+6	Kekitos Chocolate	bimbo	105g bolsa	4	2	7	4	Bajo		2	2	2018-10-31 14:25:12.033923	2018-10-31 14:37:17.546469	7750727004654	1.5
+10	Kekitos Naranja	Bimbo	105g bolsa	4	2	7	4	Bajo		2	2	2018-10-31 14:38:29.985665	2018-10-31 14:38:29.985665	7750727004661	1.5
+11	Mr Brown	Bimbo	45G bolsa	12	2	7	12	Alto		2	2	2018-10-31 14:47:58.4378	2018-10-31 14:47:58.4378	7750727005866	1
+42	Cereal Angel Flakes	Makro	22g bolsa	12	2	7	12	Alto		3	3	2018-10-31 16:15:28.657477	2018-10-31 16:15:28.657477	7759826000130	0.5
+13	Submarino Fresa	Bimbo	60g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:55:59.206245	2018-10-31 14:55:59.206245	7750727004593	1.19999999999999996
+12	Submarinos Chocolate 	Bimbo	60g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:54:46.383241	2018-10-31 14:56:38.252849	7750727004210	1.19999999999999996
+14	Submarino Vainilla	Bimbo	60g bolsa	6	2	7	6	Medio		2	2	2018-10-31 14:57:26.774129	2018-10-31 14:57:26.774129	7750727005101	1.19999999999999996
+17	Bimboletes Marmoleado	Bimbo	55g bolsa	2	2	7	2	Reponer		2	2	2018-10-31 15:02:14.720737	2018-10-31 15:02:14.720737	7750727001042	1.19999999999999996
+16	Bimboletes Vainilla	Bimbo	55g bolsa	4	2	7	4	Bajo		2	2	2018-10-31 15:00:14.675123	2018-10-31 15:02:51.947199	7750727006061	1.19999999999999996
+18	Bimboletes Naranja	Bimbo	55g bolsa	2	2	7	2	Reponer		2	2	2018-10-31 15:03:48.143669	2018-10-31 15:03:48.143669	7750727003831	1.19999999999999996
+19	Lay's Clasicas	Frito Lay's	33g bolsa	24	2	7	24	Alto		2	4	2018-10-31 15:12:05.679878	2018-10-31 15:12:50.547999	7758574001192	1
+20	Lay's 	Frito Lay's	36g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:14:41.821006	2018-10-31 15:14:41.821006	7752025008990	1
+21	Doritos Variados	Frito Lay's	43g bolsa	24	2	7	24	Alto		2	4	2018-10-31 15:16:39.92853	2018-10-31 15:16:39.92853	7752025008587	1.19999999999999996
+22	Piqueo Snax	Frito Lay's	49g bolsa	24	2	7	24	Alto		2	4	2018-10-31 15:21:20.142646	2018-10-31 15:21:20.142646	7758574000966	1.19999999999999996
+23	Cheetos Picantes	Frito Lay's	36g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:23:11.734702	2018-10-31 15:23:11.734702	7752025009140	1
+24	Cheetos Queso	Frito Lay's	34g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:24:25.441008	2018-10-31 15:24:25.441008	7758574000836	1
+25	Tortees Picante	Frito Lay's	64g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:25:21.306264	2018-10-31 15:25:21.306264	7752025006729	1
+26	Camotes NatuChips	Frito Lay's	36g	12	2	7	12	Alto		2	4	2018-10-31 15:26:39.042985	2018-10-31 15:26:39.042985	7752025008501	1
+27	Cheese Tris	Frito Lay's	43g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:28:25.826478	2018-10-31 15:28:25.826478	7752025007290	1
+28	Cuates Rancheritos	Frito Lay's	33g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:29:54.455067	2018-10-31 15:29:54.455067	7758574001116	0.5
+29	Cuates Tradicional	Frito Lay's	33g bolsa	12	2	7	12	Alto		2	4	2018-10-31 15:30:49.670085	2018-10-31 15:30:49.670085	7758574001093	0.5
+30	Habas Karinto	Karinto	35g bolsa	24	2	7	24	Alto		2	5	2018-10-31 15:36:30.086825	2018-10-31 15:36:30.086825	7758574001017	1
+31	Cuates Picante	Frito Lay's	33g bolsa	24	2	7	24	Alto		2	4	2018-10-31 15:37:41.025888	2018-10-31 15:37:41.025888	7758574001109	0.5
+33	Mani Picante	Karinto	39g bolsa	12	2	7	12	Alto		2	5	2018-10-31 15:40:07.093887	2018-10-31 15:40:07.093887	7758574000997	1
+34	Mani Salado	Karinto	39g bolsa	12	2	7	12	Alto		2	5	2018-10-31 15:41:24.499492	2018-10-31 15:41:24.499492	7758574000980	1
+35	Tostadas Clasicas	Bimbo	96g bolsa	6	2	7	6	Medio		2	2	2018-10-31 15:52:55.068562	2018-10-31 15:52:55.068562	7750727005774	2.5
+36	Keke Marmoleado	Bimbo	380g bolsa	1	1	7	1	Reponer		2	2	2018-10-31 15:55:48.410315	2018-10-31 15:55:48.410315	7750727005651	6.5
+37	Keke Marmoleado Naranja	Bimbo	380g	3	2	7	3	Bajo		2	2	2018-10-31 15:57:41.459968	2018-10-31 15:57:41.459968	7750727005668	6.5
+38	Pan De Molde Integral	Bimbo	360g bolsa	2	2	7	2	Reponer		2	2	2018-10-31 15:59:31.928385	2018-10-31 15:59:31.928385	7750727005590	3.5
+39	Pan de Molde Blanco Bimbo	Bimbo	420g bolsa	2	2	7	2	Reponer		2	2	2018-10-31 16:01:07.334519	2018-10-31 16:01:07.334519	7750727005927	3.5
+43	Cereal Angel Zuck	Makro	20g bolsa	12	2	7	12	Alto		3	3	2018-10-31 16:16:54.672109	2018-10-31 16:16:54.672109	7759826005319	0.5
+44	Cereal Fresia Almohada	Makro	18g bolsa	11	2	7	11	Alto		3	3	2018-10-31 16:19:32.968238	2018-10-31 16:19:32.968238	7759826001328	0.5
+45	Manjarblanco Bonl	Gloria	200g bolsa	6	2	7	6	Medio		2	3	2018-10-31 16:22:55.621641	2018-10-31 16:22:55.621641	7751271001274	3
+46	Ajinomen Pollo	Makro	80g bolsa	24	2	7	24	Alto		4	3	2018-10-31 16:27:02.750275	2018-10-31 16:27:02.750275	7754487001687	1
+48	Solido de Atun Gloria 	Gloria	170g lata	6	2	7	6	Medio		4	1	2018-10-31 16:33:07.39042	2018-10-31 16:33:07.39042	77503664	5
+49	Filete de Atun Gloria	Gloria	170g lata	6	2	7	6	Medio		4	1	2018-10-31 16:34:37.882136	2018-10-31 16:34:37.882136	7751271019743	5
+50	Leche Condensada	Nestle	100g lata	24	2	7	24	Alto		4	6	2018-10-31 16:36:18.297053	2018-10-31 16:36:18.297053	7702024002826	2
+47	Ajinomen Carne	Makro	80g bolsa	24	2	7	24	Alto		4	3	2018-10-31 16:27:41.814326	2018-10-31 16:37:48.135613	7754487001700	1
+51	Sublime Blanco	Nestle	40g bolsa	12	2	7	12	Alto		5	6	2018-10-31 16:45:40.028575	2018-10-31 16:54:19.033687	7613036116022	1.5
+52	Sublime Chocolate Barra	Nestle	14g barra	30	2	7	30	Alto		5	6	2018-10-31 16:57:57.741754	2018-10-31 16:57:57.741754	7613036220149	0.800000000000000044
+53	Sublime Sonrisa 	Nestle	40g bolsa	20	2	7	20	Alto		5	6	2018-10-31 16:59:12.773937	2018-10-31 16:59:12.773937	7613036524667	1.5
+32	Chifles Karinto	Karinto	19g bolsa	23	2	7	24	Alto		2	5	2018-10-31 15:38:40.551861	2018-11-01 00:53:46.663184	7752025008846	0.5
+55	Sublime Almendras	Nestle	50g bolsa	10	2	7	10	Alto		5	6	2018-10-31 17:01:17.335951	2018-10-31 17:01:17.335951	7613035196902	2
+56	Sublime Clasico	Nestle	30g bolsa 	24	2	7	24	Alto		5	6	2018-10-31 17:03:35.028026	2018-10-31 17:03:35.028026	7613035049628	1.19999999999999996
+58	Morochas Galleta	Nestle	30g bolsa	16	2	7	16	Alto		5	6	2018-10-31 17:06:30.59582	2018-10-31 17:06:30.59582	7613035963948	0.800000000000000044
+57	Morochas Snack	Nestle	46g bolsa	16	2	7	16	Alto		6	6	2018-10-31 17:04:42.918674	2018-10-31 17:07:25.876049	7613035612426	1
+59	Yogurt Laive Fresa	Laive	180g botella	12	2	7	12	Alto		7	7	2018-10-31 17:57:05.922786	2018-10-31 17:57:05.922786	7750151005630	1.19999999999999996
+60	Yogurt Laive Vainilla	Laive	180g botella	12	2	7	12	Alto		7	7	2018-10-31 17:58:47.509656	2018-10-31 17:58:47.509656	7750151005647	1.19999999999999996
+61	Yogurt Laive Durazno	Laive	180g botella	12	2	7	12	Alto		7	7	2018-10-31 17:59:25.871832	2018-10-31 17:59:25.871832	7750151005654	1.19999999999999996
+64	Yogurt Gloria Durazno	Gloria	185 botella	6	2	7	6	Medio		7	1	2018-10-31 18:07:49.61664	2018-10-31 20:23:52.111841	7751271022392	1.30000000000000004
+65	Plan Blanco PyC	PyC	500g bolsa	2	2	7	2	Reponer		2	8	2018-10-31 18:15:34.147857	2018-10-31 18:16:11.191859	7750727005064	5
+66	Glacitas Toffee	Makro	32g bolsa	6	2	7	6	Medio		8	3	2018-10-31 18:21:13.244086	2018-10-31 18:22:49.761937	7750243031455	0.699999999999999956
+67	Glacitas Chocolate	Makro	32g bolsa	6	2	7	6	Medio		8	3	2018-10-31 18:23:44.164999	2018-10-31 18:23:44.164999	7750243031479	0.699999999999999956
+68	Glacitas Fresa	Makro	32g bolsa	6	2	7	6	Medio		8	3	2018-10-31 18:24:33.09977	2018-10-31 18:24:33.09977	7750243031448	0.699999999999999956
+70	Galleta Oreo	Makro	36g bolsa	12	2	7	12	Alto		8	3	2018-10-31 18:27:00.827859	2018-10-31 18:27:00.827859	7750168002240	0.699999999999999956
+71	Cua Cua	Makro	18g bolsa	30	2	7	30	Alto		8	3	2018-10-31 18:30:18.823286	2018-10-31 18:30:18.823286	7750168799584	0.699999999999999956
+72	Doña Pepa	Makro	23g bolsa	30	2	7	30	Alto		8	3	2018-10-31 18:31:36.299101	2018-10-31 18:31:36.299101	7622300095888	0.699999999999999956
+73	GoldenCereal-Leche	Makro	18g bolsa	12	2	7	12	Alto		3	3	2018-10-31 18:33:03.217508	2018-10-31 18:33:03.217508	7750885016384	0.699999999999999956
+75	Mustafa Tikys	Makro	20g bolsa	28	2	7	28	Alto		5	3	2018-10-31 18:35:36.578086	2018-10-31 18:35:36.578086	7752748002640	0.699999999999999956
+76	Vizzio	Makro	21g bolsa	20	2	7	20	Alto		5	3	2018-10-31 18:39:23.140321	2018-10-31 18:39:23.140321	7750885011778	1
+77	Chin Chin 	Makro	15g envase	24	2	7	24	Alto		5	3	2018-10-31 18:41:15.702921	2018-10-31 18:41:15.702921	1	0.599999999999999978
+78	Cañonazo	Makro	22g barra	24	2	7	24	Alto		5	3	2018-10-31 18:45:10.044984	2018-10-31 18:45:10.044984	7750885016445	0.5
+79	Sapito	Makro	10g barra 	20	2	7	20	Alto		5	3	2018-10-31 18:45:48.805538	2018-10-31 18:45:48.805538	7757174002592	0.5
+82	Ambrosia	Makro	32g bolsa	12	2	7	12	Alto		9	3	2018-10-31 18:52:52.708799	2018-10-31 18:52:52.708799	7750885007757	0.699999999999999956
+83	Mogul	Makro	30g bolsa	12	2	7	12	Alto		9	3	2018-10-31 18:53:55.642924	2018-10-31 18:53:55.642924	7790580199913	0.699999999999999956
+84	Full Cherry 	Makro	22.5g bolsa	24	2	7	24	Alto		10	3	2018-10-31 18:55:02.920264	2018-10-31 18:55:33.645358	7750885008877	0.599999999999999978
+85	Mentitas	Makro	21g bolsa	24	2	7	24	Alto		10	3	2018-10-31 18:56:25.285835	2018-10-31 18:56:25.285835	7750885012645	0.599999999999999978
+86	Trolli	Makro	22g bolsa	40	2	7	40	Alto		9	3	2018-10-31 18:57:08.811314	2018-10-31 18:57:08.811314	4003084880434	1
+87	Trident Mora Azul	Makro	10.2g bolsa	18	2	7	18	Alto		11	3	2018-10-31 19:04:10.894597	2018-10-31 19:04:10.894597	7702133862816	1
+88	Trident Menta Suave	Makro	10.2g bolsa	18	2	7	18	Alto		11	3	2018-10-31 19:04:49.303481	2018-10-31 19:04:49.303481	7702133862809	1
+90	Mentos Magic	Makro	29,5g bolsa	12	2	7	12	Alto		10	3	2018-10-31 19:08:50.133682	2018-10-31 19:08:50.133682	78930650	1.19999999999999996
+89	Full Masti Crunch	Makro	16.2g bolsa	20	2	7	20	Alto		10	3	2018-10-31 19:05:51.673835	2018-10-31 19:09:12.638391	7750885006989	0.599999999999999978
+91	Halls Azul	Makro	25.2g barra	12	2	7	12	Alto		10	3	2018-10-31 19:11:12.655879	2018-10-31 19:11:12.655879	7622210427076	1
+92	Halls Rojo	Makro	25,2g barra	12	2	7	12	Alto		10	3	2018-10-31 19:12:00.975985	2018-10-31 19:12:00.975985	7622210427045	1
+93	Halls Morado 	Makro	25,2g barra	12	2	7	12	Alto		10	3	2018-10-31 19:12:58.887475	2018-10-31 19:12:58.887475	7622210427137	1
+94	Halls Negro	Makro	25,2g barra	12	2	7	12	Alto		10	3	2018-10-31 19:13:35.380996	2018-10-31 19:13:35.380996	7622210427106	1
+95	Mogul Fruits	Makro	35g barra	12	2	7	12	Alto		10	3	2018-10-31 19:14:48.119606	2018-10-31 19:14:48.119606	7790580602000	1
+97	Boogie 	Makro	2.72g caja	120	2	7	120	Alto		11	3	2018-10-31 19:20:17.66015	2018-10-31 19:20:17.66015	2	0.100000000000000006
+102	Yogurt Vainilla 500	Gloria	500g botella	6	2	7	6	Medio		7	1	2018-10-31 19:28:23.489451	2018-10-31 19:28:23.489451	7751271012003	2
+101	Yogurt Fresa500	Gloria	500g botella	6	2	7	6	Medio		7	1	2018-10-31 19:26:56.199469	2018-10-31 19:29:05.860875	7751271011990	2
+99	Yogurt Fresa LT.	Laive	946 ML botella	12	2	7	12	Alto		7	7	2018-10-31 19:24:26.36567	2018-10-31 19:29:27.227074	7750151111942	5.5
+100	Yogurt Vainilla Lt.	Laive	946 ML botella	12	2	7	12	Alto		7	7	2018-10-31 19:25:13.470372	2018-10-31 19:29:41.2828	7750151295468	5.5
+103	Leche Gloria Azul Lata	Gloria	400g lata	24	2	7	24	Alto		12	1	2018-10-31 19:36:33.189621	2018-10-31 19:36:33.189621	7751271021975	3.29999999999999982
+105	Gloria Acti Avena	Makro	1Lt. Caja	6	2	7	6	Medio		12	1	2018-10-31 19:37:59.880411	2018-10-31 19:37:59.880411	7751271016834	6.5
+106	Leche Ideal	Nestle	395g Lata	24	2	7	24	Alto		12	6	2018-10-31 19:39:35.407399	2018-10-31 19:39:35.407399	7613036552806	2.5
+63	Yogurt Gloria Lucuma 	Gloria	185g botella	6	2	7	6	Medio		7	1	2018-10-31 18:06:25.177275	2018-10-31 20:23:24.492835	7751271022408	1.30000000000000004
+62	Yogurt Gloria Fresa	Gloria 	185g botela	6	2	7	6	Medio		7	1	2018-10-31 18:04:12.596631	2018-10-31 20:23:41.265486	7751271022385	1.30000000000000004
+54	Sublime Extremo	Nestle	55g bolsa	11	2	7	12	Alto		5	6	2018-10-31 17:00:03.267409	2018-11-01 03:28:02.363002	7613036156103	2
+96	Tic Tac	Makro	16g caja	11	2	7	12	Alto		10	3	2018-10-31 19:15:30.66134	2018-11-01 00:11:22.781035	78600027	1.5
+98	Bubbaloo	Makro	5.5g bolsa	55	2	7	70	Alto		11	3	2018-10-31 19:21:26.947973	2018-11-01 03:10:39.149138	3	0.100000000000000006
+69	Chocman	Makro	30g bolsa	11	2	7	12	Alto		5	3	2018-10-31 18:25:26.554987	2018-11-01 01:47:47.967929	7750885438759	0.699999999999999956
+74	ChipsCereal-Lece	Makro	18g bolsa 	8	2	7	12	Alto		3	3	2018-10-31 18:33:57.196969	2018-11-01 01:50:23.836913	7750885016261	0.5
+104	Leche Gloria Roja Lata	Gloria	400g lata	24	2	7	24	Alto		12	1	2018-10-31 19:36:41.293759	2018-10-31 19:40:47.158629	7751271021999	3.5
+107	Gloria Sin Lactosa	Gloria	400g 	12	2	7	12	Alto		12	1	2018-10-31 19:41:30.980236	2018-10-31 19:41:30.980236	7751271022712	3.5
+108	Leche Condensada Gloria	Gloria	393g Lata	6	2	7	6	Medio		12	1	2018-10-31 19:44:25.473645	2018-10-31 19:44:25.473645	7751271024679	5
+109	Agua San Luis Sin Gas Lt	Coca Cola	1,5 Lt Botella	6	2	7	6	Medio		1	9	2018-10-31 19:45:50.151687	2018-10-31 19:46:41.335242	7750182001137	2
+110	Watt's Naranja 	Laive	200ml caja	12	2	7	12	Alto		1	7	2018-10-31 19:50:30.713745	2018-10-31 19:50:30.713745	7750341000506	1
+111	Watt's Mango	Laive	200ml caja	12	2	7	12	Alto		1	7	2018-10-31 19:51:24.075894	2018-10-31 19:51:24.075894	7750341000476	1
+112	Watts' Pera	Laive	200ml caja	12	2	7	12	Alto		1	7	2018-10-31 19:51:53.628256	2018-10-31 19:51:53.628256	7750341000490	1
+113	Watt's Piña	Laive	200ml caja	12	2	7	2	Alto		1	7	2018-10-31 19:52:38.464923	2018-10-31 19:52:38.464923	7750341000483	1
+114	Watt's Manzana	Laive	200ml caja	12	2	7	12	Alto		1	7	2018-10-31 19:53:27.033702	2018-10-31 19:53:27.033702	7750341000469	1
+115	Watt's Durazno	Laive	200ml caja	12	2	7	12	Alto		1	7	2018-10-31 19:54:06.304867	2018-10-31 19:54:06.304867	7750341000452	1
+116	Gloria Chocolatada	Gloria	180ml caja	6	2	7	6	Medio		1	1	2018-10-31 19:55:05.856595	2018-10-31 19:55:05.856595	7751271016681	1.30000000000000004
+118	Pilsen Lata	Makro	355ml lata 	12	2	7	12	Alto		1	3	2018-10-31 20:04:21.590836	2018-10-31 20:04:21.590836	7753749132817	3.5
+119	Guarana Lata	Makro	355ml lata 	6	2	7	6	Medio		1	3	2018-10-31 20:06:58.380667	2018-10-31 20:06:58.380667	77542502	2.5
+120	Gaseosa Inca Kola 500 ml	Inca Kola	500 ml	24	8	4	12	Medio		1	9	2018-10-31 21:20:08.806206	2018-10-31 21:20:08.806206	7750236173896	2.20000000000000018
+121	Gaseosa Coca Cola 500 ml	Coca Cola	500 ml	24	8	4	12	Medio		1	9	2018-10-31 21:23:31.478996	2018-10-31 21:23:31.478996	7750182155656	2.20000000000000018
+122	Gaseosa Inca Kola 300 ml	Inca Kola	300 ml	12	4	4	6	Medio		1	9	2018-10-31 21:26:01.133862	2018-10-31 21:26:01.133862	7750182003308	1.5
+123	Coca Cola 300 ml	Coca Cola	300 ml	12	4	4	6	Medio		1	9	2018-10-31 21:28:12.754882	2018-10-31 21:28:12.754882	7750182003292	1.5
+124	Gaseosa Coca Cola 300 ml	Coca Cola	300 ml	12	4	4	6	Medio		1	9	2018-10-31 21:30:33.061806	2018-10-31 21:30:33.061806	7750182003292	1.5
+126	Gaseosa Fanta sin azucar 400 ml	Fanta	400 ml	12	6	1	12	Bajo		1	3	2018-10-31 21:42:53.537861	2018-10-31 21:43:45.096367	7750182221573	1.80000000000000004
+127	Coca Cola sin azucar	Coca Cola	500 ml	6	3	1	6	Bajo		1	3	2018-10-31 21:47:59.788373	2018-10-31 21:47:59.788373	7750182000697	2.20000000000000018
+128	Inca Kola Sin azucar 500 ml	Inca Kola	500 ml	6	4	4	6	Bajo		1	3	2018-10-31 21:51:13.750604	2018-10-31 21:51:13.750604	7750182003322	2.20000000000000018
+129	Gaseosa Sprite 3L	Spite	3L	4	2	4	4	Bajo		1	9	2018-10-31 21:58:26.800063	2018-10-31 21:58:26.800063	7750182000222	8
+131	San Luis sin gas 625 ml	San Luis	625 ml	15	7	4	15	Medio		1	9	2018-10-31 22:05:50.683691	2018-10-31 22:05:50.683691	7750182001205	1.19999999999999996
+132	Gaseosa Coca Cola 1.5 L	Coca Cola	1.5 L	6	3	3	6	Bajo		1	9	2018-10-31 22:15:51.671369	2018-10-31 22:15:51.671369	7750182155663	6.5
+133	Gasesosa Coca Cola 3L.	Coca Cola	3L	4	2	3	4	Bajo		1	9	2018-10-31 22:21:24.976934	2018-10-31 22:21:24.976934	7750182001250	10
+134	Inca Kola 2.25 L	Inca Kola	2.25 L	6	3	4	6	Bajo		1	9	2018-10-31 22:25:39.672995	2018-10-31 22:25:39.672995	7750182004220	6.5
+136	Tampico Citrus Punch 1.5 L	Tampico	1.5 l	6	3	3	6	Bajo		1	1	2018-10-31 22:36:23.141479	2018-10-31 22:36:23.141479	7751271006989	4.20000000000000018
+135	Tampico Citrus Punch	Tampico	3L	4	1	3	3	Alto		1	1	2018-10-31 22:32:06.532515	2018-10-31 22:38:35.029837	7751271006996	6.5
+137	Everess Ginger Ale 1.5 L	EVERESS	1.5 L	6	3	1	6	Bajo		1	3	2018-10-31 22:43:05.807762	2018-10-31 22:43:05.807762	7751580001101	5.5
+138	Guarana Backus	guarana	2l	6	3	1	6	Bajo		1	3	2018-10-31 22:46:16.845117	2018-10-31 22:46:16.845117	7753749001632	5.5
+139	Walts naranja	Walts	1 L	4	2	1	4	Bajo		12	3	2018-10-31 22:52:18.877515	2018-10-31 22:52:18.877515	7750341000582	3.5
+140	Chocolatada Gloria	Gloria	33.8 oz	6	3	1	6	Bajo		12	1	2018-10-31 22:55:22.785597	2018-10-31 22:55:22.785597	7751271019569	5
+141	Leche Gloria Azul Caja	Gloria	33.8 oz	6	3	1	6	Bajo		12	1	2018-10-31 22:58:59.95877	2018-10-31 22:58:59.95877	7751271019545	4.5
+142	Leche Roja Caja GLoria	Gloria	33.8 oz	6	3	1	6	Bajo		12	1	2018-10-31 23:01:21.532341	2018-10-31 23:01:21.532341	7751271019552	4.5
+143	Leche GLoria Celeste caja	Gloria	33.8 oz	6	3	1	6	Bajo		12	1	2018-10-31 23:02:42.117978	2018-10-31 23:02:42.117978	7751271019606	4.5
+144	queso Edam	Gloria	1	12	4	1	12	Medio		12	1	2018-10-31 23:06:24.954169	2018-10-31 23:06:24.954169	7751271009928	4.5
+15	Nito Marinela	Bimbo	60g bolsa	11	2	7	12	Alto		2	2	2018-10-31 14:58:34.925476	2018-11-01 00:48:31.423687	7750727003718	1
+80	Loop Gomitas Acidas	Makro	25g bolsa	11	2	7	12	Alto		9	3	2018-10-31 18:50:56.284578	2018-11-01 01:09:49.885852	7750885009539	0.699999999999999956
+81	Ambrosito	Makro	25g bolsa	11	2	7	12	Alto		9	3	2018-10-31 18:51:37.87707	2018-11-01 01:09:49.892213	7750885009836	0.699999999999999956
+145	Fanta	Fanta	3L	4	2	3	4	Bajo		1	9	2018-11-01 02:49:04.208293	2018-11-01 02:49:04.208293	7750182495301	7
+125	Gaseosa seven up	7 up	355 ml	14	5	1	15	Medio		1	3	2018-10-31 21:33:11.991992	2018-11-01 02:52:59.272314	7751580001040	1.5
+117	Volt Maca	Makro	300ml botella	11	2	7	12	Alto		1	3	2018-10-31 19:56:54.620257	2018-11-01 03:10:11.984336	7750670013154	2
+130	Gaseosa Sprite 400 ml	Sprite	400 ml	11	6	4	12	Bajo		1	9	2018-10-31 22:03:29.32913	2018-11-01 03:28:02.355895	7750182004473	2
+\.
+
+
+--
+-- Name: products_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.products_id_seq', 145, true);
+
+
+--
+-- Data for Name: purchase_items; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.purchase_items (id, price, quantity, product_id, purchase_order_id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Name: purchase_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.purchase_items_id_seq', 1, false);
+
+
+--
+-- Data for Name: purchase_orders; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.purchase_orders (id, number, comment, replenisher_id, created_at, updated_at) FROM stdin;
+1	1	-	1	2018-10-31 13:41:47.070393	2018-10-31 13:41:47.070393
+\.
+
+
+--
+-- Name: purchase_orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.purchase_orders_id_seq', 1, true);
+
+
+--
+-- Data for Name: replenishers; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.replenishers (id, fname, lname, email, phone, dni, created_at, updated_at) FROM stdin;
+1	Jose	Malqui	luisedmundo354@gmail.com	999240014	\N	2018-10-31 13:20:27.142105	2018-10-31 13:20:27.142105
+\.
+
+
+--
+-- Name: replenishers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.replenishers_id_seq', 1, true);
+
+
+--
+-- Data for Name: sale_items; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.sale_items (id, price, quantity, product_id, sale_order_id, created_at, updated_at) FROM stdin;
+1	1.5	1	96	3	2018-11-01 00:11:22.764334	2018-11-01 00:11:22.764334
+2	\N	5	98	4	2018-11-01 00:21:10.247359	2018-11-01 00:21:10.247359
+3	1	1	15	5	2018-11-01 00:48:31.421682	2018-11-01 00:48:31.421682
+4	0.5	1	32	6	2018-11-01 00:53:46.658654	2018-11-01 00:53:46.658654
+5	0.699999999999999956	1	81	7	2018-11-01 01:09:49.868105	2018-11-01 01:09:49.868105
+6	0.699999999999999956	1	80	7	2018-11-01 01:09:49.875808	2018-11-01 01:09:49.875808
+7	0.699999999999999956	1	80	7	2018-11-01 01:09:49.882744	2018-11-01 01:09:49.882744
+8	0.699999999999999956	1	81	7	2018-11-01 01:09:49.889114	2018-11-01 01:09:49.889114
+9	0.699999999999999956	4	74	8	2018-11-01 01:45:38.056831	2018-11-01 01:45:38.056831
+10	0.699999999999999956	1	69	9	2018-11-01 01:47:47.963323	2018-11-01 01:47:47.963323
+11	1.5	1	125	10	2018-11-01 02:52:59.265775	2018-11-01 02:52:59.265775
+12	2	1	117	11	2018-11-01 03:10:11.980996	2018-11-01 03:10:11.980996
+13	\N	10	98	12	2018-11-01 03:10:39.145726	2018-11-01 03:10:39.145726
+14	2	1	130	13	2018-11-01 03:28:02.351778	2018-11-01 03:28:02.351778
+15	2	1	54	13	2018-11-01 03:28:02.35967	2018-11-01 03:28:02.35967
+\.
+
+
+--
+-- Name: sale_items_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.sale_items_id_seq', 15, true);
+
+
+--
+-- Data for Name: sale_orders; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.sale_orders (id, number, comment, customer_id, created_at, updated_at) FROM stdin;
+1	1	-	1	2018-10-31 13:41:07.755474	2018-10-31 13:41:07.755474
+2	1	-	1	2018-10-31 13:41:46.994305	2018-10-31 13:41:46.994305
+3	2		2	2018-11-01 00:11:22.760797	2018-11-01 00:11:22.760797
+4	3		2	2018-11-01 00:21:10.243245	2018-11-01 00:21:10.243245
+5	4		2	2018-11-01 00:48:31.419408	2018-11-01 00:48:31.419408
+6	5		2	2018-11-01 00:53:46.655044	2018-11-01 00:53:46.655044
+7	6		2	2018-11-01 01:09:49.864419	2018-11-01 01:09:49.864419
+8	7		2	2018-11-01 01:45:38.052446	2018-11-01 01:45:38.052446
+9	8		2	2018-11-01 01:47:47.957732	2018-11-01 01:47:47.957732
+10	9		2	2018-11-01 02:52:59.260307	2018-11-01 02:52:59.260307
+11	10		2	2018-11-01 03:10:11.973956	2018-11-01 03:10:11.973956
+12	11		2	2018-11-01 03:10:39.141777	2018-11-01 03:10:39.141777
+13	12		2	2018-11-01 03:28:02.347283	2018-11-01 03:28:02.347283
+\.
+
+
+--
+-- Name: sale_orders_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.sale_orders_id_seq', 13, true);
+
+
+--
+-- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.schema_migrations (version) FROM stdin;
+20181031130407
+20180828230735
+20180831045137
+20180831045656
+20180906220821
+20180906220855
+20180906220908
+20180906220917
+20180906220931
+20180906220939
+20180917041313
+20181031132656
+\.
+
+
+--
+-- Data for Name: suppliers; Type: TABLE DATA; Schema: public; Owner: luis
+--
+
+COPY public.suppliers (id, name, manager, phone, address, created_at, updated_at) FROM stdin;
+1	Gloria	Julio	999240014		2018-10-31 13:19:40.175384	2018-10-31 13:19:40.175384
+2	BIMBO		\N		2018-10-31 14:00:43.556929	2018-10-31 14:00:43.556929
+3	MAKRO		\N		2018-10-31 14:01:10.334143	2018-10-31 14:01:10.334143
+4	Frito Lay's		\N		2018-10-31 15:12:28.20079	2018-10-31 15:12:28.20079
+5	Karinto		\N		2018-10-31 15:34:34.654009	2018-10-31 15:34:34.654009
+6	Nestle		\N		2018-10-31 16:34:54.481697	2018-10-31 16:34:54.481697
+7	Laive 		\N		2018-10-31 17:13:21.224935	2018-10-31 17:13:21.224935
+8	PyC		\N		2018-10-31 18:15:45.406722	2018-10-31 18:15:45.406722
+9	Coca Cola 		\N		2018-10-31 19:46:05.225249	2018-10-31 19:46:05.225249
+\.
+
+
+--
+-- Name: suppliers_id_seq; Type: SEQUENCE SET; Schema: public; Owner: luis
+--
+
+SELECT pg_catalog.setval('public.suppliers_id_seq', 9, true);
+
+
+--
+-- Name: ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: categories_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.categories
+    ADD CONSTRAINT categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customers_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: products_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: purchase_items_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.purchase_items
+    ADD CONSTRAINT purchase_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: purchase_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.purchase_orders
+    ADD CONSTRAINT purchase_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: replenishers_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.replenishers
+    ADD CONSTRAINT replenishers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sale_items_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.sale_items
+    ADD CONSTRAINT sale_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sale_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.sale_orders
+    ADD CONSTRAINT sale_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: suppliers_pkey; Type: CONSTRAINT; Schema: public; Owner: luis
+--
+
+ALTER TABLE ONLY public.suppliers
+    ADD CONSTRAINT suppliers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_products_on_category_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_products_on_category_id ON public.products USING btree (category_id);
+
+
+--
+-- Name: index_products_on_supplier_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_products_on_supplier_id ON public.products USING btree (supplier_id);
+
+
+--
+-- Name: index_purchase_items_on_product_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_purchase_items_on_product_id ON public.purchase_items USING btree (product_id);
+
+
+--
+-- Name: index_purchase_items_on_purchase_order_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_purchase_items_on_purchase_order_id ON public.purchase_items USING btree (purchase_order_id);
+
+
+--
+-- Name: index_purchase_orders_on_replenisher_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_purchase_orders_on_replenisher_id ON public.purchase_orders USING btree (replenisher_id);
+
+
+--
+-- Name: index_sale_items_on_product_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_sale_items_on_product_id ON public.sale_items USING btree (product_id);
+
+
+--
+-- Name: index_sale_items_on_sale_order_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_sale_items_on_sale_order_id ON public.sale_items USING btree (sale_order_id);
+
+
+--
+-- Name: index_sale_orders_on_customer_id; Type: INDEX; Schema: public; Owner: luis
+--
+
+CREATE INDEX index_sale_orders_on_customer_id ON public.sale_orders USING btree (customer_id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

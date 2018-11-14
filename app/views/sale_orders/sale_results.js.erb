@@ -1,0 +1,11 @@
+var total = 0.0;
+var change = 0.0;
+$('.item-price').each(function() {
+  if (this.value){
+    var uprice = parseFloat(this.value);
+    total += uprice;
+  };
+});
+change = parseFloat($('#pay-with').val()) - total;
+$("#change").text(change.toFixed([1]));
+$("#result").text(total.toFixed([1]));

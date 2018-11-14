@@ -32,6 +32,12 @@ class SaleOrdersController < ApplicationController
     end
   end
 
+  def sale_results
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def show
     @sale_items = @sale_order.sale_items
   end
@@ -62,6 +68,15 @@ class SaleOrdersController < ApplicationController
     #Redirect
     respond_to do |format|
       format.html { redirect_to sale_orders_path, notice: t('The order was successfully destroyed') }
+    end
+  end
+
+  def report
+    @sale_orders = SaleOrder.all
+    respond_to do |format|
+      format.html
+      format.csv { send_data @sale_orders.to_csv }
+      format.xls
     end
   end
 
